@@ -22,6 +22,9 @@ import org.springframework.boot.actuate.cache.CachesEndpoint;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.cache.CacheManager;
+import org.springframework.boot.actuate.cache.CachesEndpointWebExtension;
+import org.springframework.boot.autoconfigure.logging.ConditionEvaluationReportLoggingListener;
+import org.springframework.boot.logging.LogLevel;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -63,5 +66,14 @@ class CachesEndpointAutoConfigurationTests {
 				.withBean(CacheManager.class, () -> mock(CacheManager.class))
 				.run((context) -> assertThat(context).doesNotHaveBean(CachesEndpoint.class));
 	}
+
+	@Test
+	void runWhenOnlyExposedOverJmxShouldHaveEndpointBeanWithoutWebExtension() {
+    this.contextRunner.withBean(CacheManager.class, () -> mock(CacheManager.class))
+            .withInitializer(new ConditionEvaluationReportLoggingListener(LogLevel.DEBUG))
+            .withPropertyValues("spring.jmx.enabled=true", "management.endpoints.jmx.exposure.include=caches")
+            .run((context) -> assertThat(context).hasSingleBean(CachesEndpoint.class)
+                    .doesNotHaveBean(CachesEndpointWebExtension.class));
+}
 
 }

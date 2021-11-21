@@ -27,6 +27,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.actuate.autoconfigure.endpoint.expose.EndpointExposure;
 
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for the
@@ -60,6 +61,7 @@ public class ConfigurationPropertiesReportEndpointAutoConfiguration {
 	}
 
 	@Bean
+	@ConditionalOnAvailableEndpoint(exposure = EndpointExposure.WEB)
 	@ConditionalOnMissingBean
 	@ConditionalOnBean(ConfigurationPropertiesReportEndpoint.class)
 	public ConfigurationPropertiesReportEndpointWebExtension configurationPropertiesReportEndpointWebExtension(

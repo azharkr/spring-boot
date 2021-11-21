@@ -30,6 +30,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.actuate.autoconfigure.endpoint.expose.EndpointExposure;
 
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for {@link CachesEndpoint}.
@@ -51,8 +52,10 @@ public class CachesEndpointAutoConfiguration {
 	}
 
 	@Bean
+	@ConditionalOnAvailableEndpoint(exposure = EndpointExposure.WEB)
 	@ConditionalOnMissingBean
 	@ConditionalOnBean(CachesEndpoint.class)
+	@ConditionalOnAvailableEndpoint(exposure = EndpointExposure.WEB)
 	public CachesEndpointWebExtension cachesEndpointWebExtension(CachesEndpoint cachesEndpoint) {
 		return new CachesEndpointWebExtension(cachesEndpoint);
 	}

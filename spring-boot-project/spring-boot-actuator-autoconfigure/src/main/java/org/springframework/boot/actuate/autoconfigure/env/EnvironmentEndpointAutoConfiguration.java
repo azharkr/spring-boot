@@ -28,6 +28,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.boot.actuate.autoconfigure.endpoint.expose.EndpointExposure;
 
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for the {@link EnvironmentEndpoint}.
@@ -58,6 +59,7 @@ public class EnvironmentEndpointAutoConfiguration {
 	}
 
 	@Bean
+	@ConditionalOnAvailableEndpoint(exposure = EndpointExposure.WEB)
 	@ConditionalOnMissingBean
 	@ConditionalOnBean(EnvironmentEndpoint.class)
 	public EnvironmentEndpointWebExtension environmentEndpointWebExtension(EnvironmentEndpoint environmentEndpoint) {

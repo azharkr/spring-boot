@@ -29,6 +29,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.quartz.QuartzAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.actuate.autoconfigure.endpoint.expose.EndpointExposure;
 
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for {@link QuartzEndpoint}.
@@ -51,6 +52,7 @@ public class QuartzEndpointAutoConfiguration {
 	}
 
 	@Bean
+	@ConditionalOnAvailableEndpoint(exposure = EndpointExposure.WEB)
 	@ConditionalOnBean(QuartzEndpoint.class)
 	@ConditionalOnMissingBean
 	public QuartzEndpointWebExtension quartzEndpointWebExtension(QuartzEndpoint endpoint) {

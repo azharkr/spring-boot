@@ -48,7 +48,7 @@ import org.springframework.core.env.Environment;
  * &#064;Configuration
  * public class MyConfiguration {
  *
- *     &#064;ConditionalOnAvailableEndpoint
+ *     &#064;ConditionalOnAvailableEndpoint`
  *     &#064;Bean
  *     public MyEndpoint myEndpoint() {
  *         ...

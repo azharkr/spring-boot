@@ -31,6 +31,9 @@ import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.boot.test.context.runner.ContextConsumer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.actuate.cache.ConfigurationPropertiesEndpointWebExtension;
+import org.springframework.boot.autoconfigure.logging.ConditionEvaluationReportLoggingListener;
+import org.springframework.boot.logging.LogLevel;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -152,5 +155,15 @@ class ConfigurationPropertiesReportEndpointAutoConfigurationTests {
 		}
 
 	}
+
+	@Test
+	void runWhenOnlyExposedOverJmxShouldHaveEndpointBeanWithoutWebExtension() {
+    this.contextRunner.withBean(ConfigurationPropertiesReportEndpoint.class,
+			() -> mock(ConfigurationPropertiesReportEndpoint.class))
+            .withInitializer(new ConditionEvaluationReportLoggingListener(LogLevel.DEBUG))
+            .withPropertyValues("spring.jmx.enabled=true", "management.endpoints.jmx.exposure.include=configprops")
+            .run((context) -> assertThat(context).hasSingleBean(ConfigurationPropertiesReportEndpoint.class)
+                    .doesNotHaveBean(ConfigurationPropertiesReportEndpointWebExtension.class));
+}
 
 }
